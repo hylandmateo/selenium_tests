@@ -1,14 +1,9 @@
 package com.mateohyland.seleniumcourse;
 
-import static org.testng.Assert.assertTrue;
-
-import java.time.Duration;
 import java.time.LocalDate;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +11,6 @@ import org.testng.annotations.Test;
 
 import com.mateohyland.seleniumcourse.pageobjects.HomePage;
 import com.mateohyland.seleniumcourse.pageobjects.ResultsPage;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class MainTest {
@@ -40,25 +34,37 @@ public class MainTest {
 		driver.get().quit();
 	}
 
-	// Avoid using hash based classes as selectors. Ex: .abcc616ec7.cc1b961f14
-
 	@Test
 	public void test() {
 
 		HomePage homePage = new HomePage(driver.get()).go();
-
+		
 		driver.get().manage().window().maximize();
 
 		homePage.waitAndCloseGeniusPopup();
+		
+		homePage.searchBox.selectDestination("Camboriú");
 
 		LocalDate today = LocalDate.now();
 		LocalDate departureDate = today.plusDays(180);
 		LocalDate returnDate = departureDate.plusDays(31);
 
-		ResultsPage resultsPage = homePage.selectDestination("Camboriú").selectDates(departureDate, returnDate)
+		ResultsPage resultsPage = homePage.searchBox.selectDestination("Camboriú").selectDates(departureDate, returnDate)
 				.submitSelection();
 
 		resultsPage.assertDestinationFound();
+		
+		resultsPage.clearInput();
+		
+		resultsPage.searchBox.selectDestination("París");
+
+		LocalDate departureDate2 = today.plusDays(190);
+		LocalDate returnDate2 = departureDate.plusDays(33);
+
+		ResultsPage resultsPage2 = resultsPage.searchBox.selectDestination("París").selectDatesFromResultsPage(departureDate2, returnDate2)
+				.submitSelection();
+
+		resultsPage2.assertDestinationFound();
 	}
 
 	@Test
