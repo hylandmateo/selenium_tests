@@ -54,14 +54,14 @@ public class MainTest {
 
 		resultsPage.assertDestinationFound();
 		
-		resultsPage.clearInput();
+		resultsPage.searchBox.clearDestinationInput();
 		
 		resultsPage.searchBox.selectDestination("París");
 
 		LocalDate departureDate2 = today.plusDays(190);
 		LocalDate returnDate2 = departureDate.plusDays(33);
 
-		ResultsPage resultsPage2 = resultsPage.searchBox.selectDestination("París").selectDatesFromResultsPage(departureDate2, returnDate2)
+		ResultsPage resultsPage2 = resultsPage.searchBox.selectDestination("París").toggleCalendar().selectDates(departureDate2, returnDate2)
 				.submitSelection();
 
 		resultsPage2.assertDestinationFound();

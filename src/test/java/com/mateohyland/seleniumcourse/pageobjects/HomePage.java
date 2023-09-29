@@ -17,7 +17,7 @@ public class HomePage {
 	protected WebDriver driver;
 	
 	@FindBy(css = "[role='dialog'][aria-modal='true'] button")
-	protected WebElement geniusPopup;
+	protected WebElement geniusPopupCloseButton;
 
 	public final SearchBox searchBox;
 
@@ -34,6 +34,6 @@ public class HomePage {
 
 	public void waitAndCloseGeniusPopup() {
 		WebDriverWait geniusPopupWait = new WebDriverWait(driver, Duration.ofSeconds(GENIUS_POPUP_TIMEOUT));
-		geniusPopupWait.until(ExpectedConditions.elementToBeClickable(geniusPopup)).click();
+		geniusPopupWait.until(ExpectedConditions.elementToBeClickable(geniusPopupCloseButton)).click();
 	}
 }

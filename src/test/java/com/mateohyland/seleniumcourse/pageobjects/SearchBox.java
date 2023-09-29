@@ -17,7 +17,8 @@ public class SearchBox {
 	protected static final int DESTINATION_SELECTION_TIMEOUT = 3;
 	protected static final int CALENDAR_POPUP_TIMEOUT = 3;
 	protected static final int SUBMIT_BUTTON_TIMEOUT = 3;
-
+	protected static final int CLEAR_DESTINATION_INPUT_TIMEOUT = 3;
+	
 	protected WebDriver driver;
 	protected String currentDestination;
 
@@ -40,6 +41,9 @@ public class SearchBox {
 
 	@FindBy(css = "[type='submit']")
 	protected WebElement submitButton;
+	
+	@FindBy(css="[data-testid=input-clear]")
+	protected WebElement clearInput;
 
 	public SearchBox selectDestination(String destination) {
 
@@ -77,26 +81,18 @@ public class SearchBox {
 
 		return this;
 	}
-
-	public SearchBox selectDatesFromResultsPage(LocalDate departureDate, LocalDate returnDate) {
-
-		List<WebElement> departureCells;
-		List<WebElement> returnCells;
-
+	
+	public SearchBox clearDestinationInput() {
+		WebDriverWait waitForClearInput = new WebDriverWait(driver, Duration.ofSeconds(CLEAR_DESTINATION_INPUT_TIMEOUT));
+		waitForClearInput.until(ExpectedConditions.elementToBeClickable(clearInput)).click();
+		
+		return this;
+	}
+	
+	public SearchBox toggleCalendar() {
 		WebDriverWait calendarWait = new WebDriverWait(driver, Duration.ofSeconds(CALENDAR_POPUP_TIMEOUT));
-		calendarWait.until(ExpectedConditions.visibilityOf(datesContainer));
-
-		while ((departureCells = driver.findElements(By.cssSelector("[data-date='" + departureDate + "']")))
-				.isEmpty()) {
-			calendarForwardArrow.click();
-		}
-		departureCells.get(0).click();
-
-		while ((returnCells = driver.findElements(By.cssSelector("[data-date='" + returnDate + "']"))).isEmpty()) {
-			calendarForwardArrow.click();
-		}
-		returnCells.get(0).click();
-
+		calendarWait.until(ExpectedConditions.visibilityOf(datesContainer)).click();
+		
 		return this;
 	}
 
